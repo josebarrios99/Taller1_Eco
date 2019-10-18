@@ -65,8 +65,8 @@ public class Main extends PApplet{
 		iddle2_1 = loadImage("img/iddle2_1.png");
 		salto1 = loadImage("img/salto1.png");
 		salto2 = loadImage("img/salto2.png");
-	    run1_1 = loadImage("img/ run1_1.png");
-	    run1_2 = loadImage("img/ run1_2.png");
+	    run1_1 = loadImage("img/run1_1.png");
+	    run1_2 = loadImage("img/run1_2.png");
 	    run2_1 = loadImage("img/run2_1.png");
 	    run2_2 = loadImage("img/run2_2.png");
 	    fondo = loadImage("img/fondo.png");
