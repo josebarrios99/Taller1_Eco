@@ -33,14 +33,17 @@ public class Control extends PApplet {
 			  
 			  holdingRight = true;
 			  break;
-			  
-		  case "salto":
-			  
-			  holdingSpace = true;
-			  break;
-		  
-		  
 		  }
+		  
+		  if (mov.equalsIgnoreCase("stoparriba")) {
+		      holdingUp = false;
+		    }
+		    if (mov.equalsIgnoreCase("stopizquierda")) {
+		      holdingLeft = false;
+		    }
+		    if (mov.equalsIgnoreCase("stopderecha")) {
+		      holdingRight = false;
+		    }
 	 
 	  }
 	  void pressKey2(int key,int keyCode) {
@@ -56,18 +59,7 @@ public class Control extends PApplet {
 	  }
 	  
 	  void releaseKey(String mov) {
-	    if (mov.equalsIgnoreCase("arriba")) {
-	      holdingUp = false;
-	    }
-	    if (mov.equalsIgnoreCase("izquierda")) {
-	      holdingLeft = false;
-	    }
-	    if (mov.equalsIgnoreCase("derecha")) {
-	      holdingRight = false;
-	    }
-	    if (mov.equalsIgnoreCase("salto")) {
-	      holdingSpace = false;
-	    }
+	   
 	   
 	  }
 	  void releaseKey2(int key,int keyCode) {

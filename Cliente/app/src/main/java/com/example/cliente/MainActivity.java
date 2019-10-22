@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 com.enviar("arriba");
             }
         });
+
+        /*
         abajo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +67,75 @@ public class MainActivity extends AppCompatActivity implements Observer {
             @Override
             public void onClick(View view) {
                 com.enviar("salto");
+            }
+        });
+        */
+
+        salto.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        com.enviar("arriba");
+                        return true; // if you want to handle the touch event
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        com.enviar("stoparriba");
+                        return true; // if you want to handle the touch event
+                }
+                return false;
+            }
+        });
+
+        abajo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        com.enviar("abajo");
+                        return true; // if you want to handle the touch event
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        com.enviar("stopabajo");
+                        return true; // if you want to handle the touch event
+                }
+                return false;
+            }
+        });
+
+        izquierda.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        com.enviar("izquierda");
+                        return true; // if you want to handle the touch event
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        com.enviar("stopizquierda");
+                        return true; // if you want to handle the touch event
+                }
+                return false;
+            }
+        });
+
+        derecha.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // PRESSED
+                        com.enviar("derecha");
+                        return true; // if you want to handle the touch event
+                    case MotionEvent.ACTION_UP:
+                        // RELEASED
+                        com.enviar("stopderecha");
+                        return true; // if you want to handle the touch event
+                }
+                return false;
             }
         });
     }

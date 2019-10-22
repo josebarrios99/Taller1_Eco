@@ -40,6 +40,17 @@ public  class Main extends PApplet implements Observer{
 	PImage gano2;
 	PImage inicio;
 	PImage instrucciones;
+	PImage empate;
+	PImage vidas1_1;
+	PImage vidas1_2;
+	PImage vidas1_3;
+	PImage vidas2_1;
+	PImage vidas2_2;
+	PImage vidas2_3;
+	PImage [] vidas1;
+	PImage [] vidas2;
+	int contadorVidas1;
+	int contadorVidas2;
 	//Enteros para controlar el tiempo que transcurre en el juego
 	int gameStartTimeSec,gameCurrentTimeSec;
 	//Entero que sirve para cambiar entre las pantallas
@@ -72,6 +83,16 @@ public  class Main extends PApplet implements Observer{
 		//Se estan inicializando las variables dependiendo de su respectivo tipo
 		font = createFont("fonts/prstart.ttf",32);
 		mostrarMoneda = true;
+		vidas1 = new PImage [4];
+		vidas2 = new PImage [4];
+		vidas1[3] = loadImage("img/vidas1_3.png");
+		vidas1[2] = loadImage("img/vidas1_1.png");
+		vidas1[1] = loadImage("img/vidas1_2.png");
+		vidas1[0] = loadImage("img/vidas1_3.png");
+		vidas2[3] = loadImage("img/vidas2_3.png");
+		vidas2[2] = loadImage("img/vidas2_1.png");
+		vidas2[1] = loadImage("img/vidas2_2.png");
+		vidas2[0] = loadImage("img/vidas2_3.png");
 		iddle1_1 = loadImage("img/iddle1_1.png");
 		iddle2_1 = loadImage("img/iddle2_1.png");
 		salto1 = loadImage("img/salto1.png");
@@ -91,8 +112,10 @@ public  class Main extends PApplet implements Observer{
 	    instrucciones = loadImage("img/instrucciones.jpg");
 	    nivel = new Nivel (this,this);
 		control = new Control (this);
-		jugador = new Player (this,this);
-		jugador2 = new Player (this,this);
+		jugador = new Player (this,this,3);
+		jugador2 = new Player (this,this,3);
+		empate = loadImage("img/empate.jpg");
+		
 		//Se llama a este metodo para otorgar mas fluidez a las animaciones
 	    frameRate(24);
 	    //Se establecen las caresteristicas iniciales del juego
@@ -130,9 +153,40 @@ public  class Main extends PApplet implements Observer{
 	 * En este metodo se valida si se gano el juego;
 	 * @return
 	 */
-	Boolean gameWon() { // checks whether all coins in the level have been collected
-		  return (jugador.getPuntaje() == nivel.getContadorObjetos() || jugador2.getPuntaje() == nivel.getContadorObjetos());
+	
+	private void won() {
+		if(jugador.getPuntaje() == nivel.getContadorObjetos()) {
+			//gana jugador 1
+			pantalla=3;
+			
 		}
+		if(jugador2.getPuntaje() == nivel.getContadorObjetos()) {
+			//gana jugador 2
+			pantalla = 4;
+		}
+		
+		if(nivel.getCurrentObjects() <= 0) {
+			
+			System.out.println("Faltan: "+nivel.getCurrentObjects());
+			
+			int indice = jugador.getPuntaje() - jugador2.getPuntaje();
+			
+			if(indice < 0) {
+				//gana jugador 2
+			}
+			if(indice > 0) {
+				//gana jugador 1
+				pantalla=3;
+			}
+			if(indice == 0) {
+				//empate?
+				pantalla = 5;
+			}
+			
+		}
+	}
+	
+	
 	/**
 	 * Este metodo es el encargado de ejecutarse siempre de forma continua
 	 */
@@ -156,8 +210,14 @@ public  class Main extends PApplet implements Observer{
 			  jugador.mover();
 			  jugador.pintarJugador();
 			  jugador2.check2();
-			  jugador2.mover();
+			  jugador2.mover2();
 			  jugador2.pintarJugador2();
+//			  if(jugador2.getVidas() < 0) {
+//				  pantalla = 3;
+//			  }
+//			  if(jugador.getVidas() < 0) {
+//				  pantalla = 4;
+//			  }
 			  if(focused == false) { 
 				  } else {
 				    textAlign(LEFT); 
@@ -165,9 +225,15 @@ public  class Main extends PApplet implements Observer{
 				    outlinedText("Coins Jugador1:"+jugador.getPuntaje() +"/"+nivel.getContadorObjetos(),8, height-10);
 				    outlinedText("Coins Jugador2:"+jugador2.getPuntaje() +"/"+nivel.getContadorObjetos(),8, height-35);
 				    textAlign(RIGHT);
-				    if(gameWon() == false) { // stop updating timer after player finishes
-				      gameCurrentTimeSec = millis()/1000; // dividing by 1000 to turn milliseconds into seconds
-				    }
+				    
+				    
+				    ////// GANAR
+				    
+				    won();
+				    
+//				    image(vidas1[jugador.getVidas()],width/2,height-30);
+//				    image(vidas2[jugador2.getVidas()],width/2,height-55);
+				    gameCurrentTimeSec = millis()/1000;
 				    int minutes = (gameCurrentTimeSec-gameStartTimeSec)/60;
 				    int seconds = (gameCurrentTimeSec-gameStartTimeSec)%60;
 				    if(seconds < 10) {
@@ -175,14 +241,17 @@ public  class Main extends PApplet implements Observer{
 				    } else {
 				      outlinedText(minutes +":"+seconds,width-8, height-10);
 				    }
-				    if(gameWon()) {
-				        pantalla = 3;
-				      }
 				  }
 			break;
 			case 3:
 					image(gano1,0,0,900,360);
-			break;	  
+			break;
+			case 4:
+				image(gano2,0,0,900,360);
+			break;	 
+			case 5:
+				image(empate,0,0,900,360);
+			break;	
 	}
 		
 		}
@@ -195,7 +264,6 @@ public  class Main extends PApplet implements Observer{
 		if (mensaje.length() > 1) {
 			System.out.println("Lenth");
 			control.pressKey(mensaje);
-			//control.releaseKey(mensaje);
 			
 		}
 	}
@@ -210,7 +278,6 @@ public  class Main extends PApplet implements Observer{
 	public void keyReleased() {
 		  control.releaseKey2(key,keyCode);
 		}
-	
 	/**
 	 * Metodo ejectuado cada vez que la pastera de ing
 	 * 
@@ -223,9 +290,9 @@ public  class Main extends PApplet implements Observer{
 			 pantalla = 1;
 		 }
 		 if(mouseX >= 417 && mouseX <= 518 && mouseY >= 300 && mouseY <= 331 && pantalla == 1) {
-			 pantalla = 2;
+			 pantalla = 3;
 		 }
-		 if(pantalla == 3) {
+		 if(pantalla == 3 || pantalla == 4 || pantalla == 5) {
 			 pantalla = 0;
 			 resetGame();
 		 }
